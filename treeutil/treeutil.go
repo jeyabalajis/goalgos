@@ -1,8 +1,11 @@
 package treeutil
 
 import (
-	"jeyabalajis/goalgos/tree"
+	"strconv"
 	"sync"
+
+	"github.com/jeyabalajis/goalgos/stringutil"
+	"github.com/jeyabalajis/goalgos/tree"
 )
 
 var wg sync.WaitGroup
@@ -42,9 +45,10 @@ func Same(t1, t2 *tree.Tree) bool {
 		close(c)
 	}(&wg, ch1)
 
-	map1 := make(map[int]int)
+	var treeHash1 uint32 = 0
+
 	for i := range ch1 {
-		map1[i]++
+		treeHash1 += stringutil.Hash(strconv.Itoa(i))
 	}
 
 	ch2 := make(chan int)
@@ -56,15 +60,14 @@ func Same(t1, t2 *tree.Tree) bool {
 		close(c)
 	}(&wg, ch2)
 
-	map2 := make(map[int]int)
+	var treeHash2 uint32 = 0
 	for i := range ch2 {
-		map2[i]++
+		treeHash2 += stringutil.Hash(strconv.Itoa(i))
 	}
 
-	for map1Key, map1Val := range map1 {
-		if map2[map1Key] != map1Val {
-			return false
-		}
+	if treeHash1 != treeHash2 {
+		return false
 	}
+
 	return true
 }
