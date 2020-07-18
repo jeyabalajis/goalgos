@@ -10,13 +10,7 @@ import (
 
 var wg sync.WaitGroup
 
-// TreePath holds all possible paths of a tree from a particular node, which is held as hash key of the map
-type TreePath map[string][][]int
-
-var treePaths TreePath
-
-// Walk walks the tree t sending all values
-// from the tree to the channel ch.
+// Walk walks the tree t sending all values from the tree to the channel ch.
 func walk(t *tree.Tree, ch *chan int) {
 	if t == nil {
 		return
@@ -37,24 +31,60 @@ func walk(t *tree.Tree, ch *chan int) {
 	*ch <- t.Value
 }
 
-func (hashMap TreePath) putHashValue(hashKey string, hashValue []int) {
-	// Serialize access to hashmap to avoid data race
-	done := make(chan struct{})
+// traverse each node and build up hash map by each node
+func traverse(t *tree.Tree, hm *TreePath, depth int, nodeQualifier string, hashKey string, acc int) {
+	if t == nil {
+		wg.Done()
+		return
+	}
 
-	go func() {
-		if value, ok := hashMap[hashKey]; ok {
-			hashMap[hashKey] = append(value, hashValue)
-		} else {
-			var s [][]int
-			hashMap[hashKey] = append(s, hashValue)
+	if nodeQualifier == "ROOT" {
+		hashKey = strconv.Itoa(depth) + "-" + strconv.Itoa(t.Value) + "-" + nodeQualifier
+		hm.createHash(hashKey, t.Value)
+	} else {
+		var left bool = false
+		if nodeQualifier == "LEFT" {
+			left = true
 		}
-		done <- struct{}{}
-	}()
-}
 
-// traverse each node and build up hash by each node
-func traverse(t *tree.Tree, depth int, hashKey string, currentList []int) {
+		hm.putHashValue(hashKey, left, acc+t.Value)
+	}
 
+	var _nodeQualifier = nodeQualifier
+	var _acc = 0
+	if t.Left != nil {
+
+		//  if it is root, qualify as left or right, else, pass on the qualifier
+		if nodeQualifier == "ROOT" {
+			_nodeQualifier = "LEFT"
+		} else {
+			_acc = acc + t.Value
+		}
+
+		wg.Add(1)
+		go traverse(t.Left, hm, depth+1, _nodeQualifier, hashKey, _acc)
+
+		wg.Add(1)
+		go traverse(t.Left, hm, depth+1, "ROOT", "", 0)
+
+	}
+
+	if t.Right != nil {
+
+		//  if it is root, qualify as left or right, else, pass on the qualifier
+		if nodeQualifier == "ROOT" {
+			_nodeQualifier = "RIGHT"
+		} else {
+			_acc = acc + t.Value
+		}
+
+		wg.Add(1)
+		go traverse(t.Right, hm, depth+1, _nodeQualifier, hashKey, _acc)
+
+		wg.Add(1)
+		go traverse(t.Right, hm, depth+1, "ROOT", "", 0)
+	}
+	wg.Done()
 }
 
 // Same determines whether the trees
@@ -99,7 +129,7 @@ func Same(t1, t2 *tree.Tree) bool {
 
 // MaxSumPath provides the maximum sum possible in a tree and also the path that corresponds
 // to this maximum sum
-func MaxSumPath(t1 *tree.Tree) (int, []int) {
+func MaxSumPath(t *tree.Tree) (maxValue int) {
 	/*
 		(1) Keep each node in a tree and it's level as a unique hashMap.
 		(2) Traverse the tree. With each traversal, perform the following on the HashKey
@@ -118,10 +148,22 @@ func MaxSumPath(t1 *tree.Tree) (int, []int) {
 		}
 		The HashMap will look as follows:
 		{
-			6(level 0): [6, [6,4], [6,3], [6,4,3], [6,4,3,13], [6,4,3,1]
-			4(level 1): 4
-			3(level 1): [[3,13], [3,1], [3,13,1]]
+			6(level 0)Root: [6, [6,4], [6,3], [6,4,3], [6,4,3,13], [6,4,3,1]
+			4(level 1)Left: 4
+			3(level 1)Right: [[3,13], [3,1], [3,13,1]]
+			13(level 2)Left: [13]
+			3(level 2)Right: [1]
 		}
 	*/
 
+	var treePaths TreePath = make(TreePath)
+
+	wg.Add(1)
+	go traverse(t, &treePaths, 0, "ROOT", "", 0)
+
+	wg.Wait()
+
+	treePaths.Print()
+	maxValue = treePaths.getMaxValue()
+	return maxValue
 }
