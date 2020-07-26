@@ -3,18 +3,21 @@ package main
 import (
 	"fmt"
 
-	"github.com/jeyabalajis/goalgos/heaputil"
+	"github.com/jeyabalajis/goalgos/stringutil"
 )
 
 func main() {
-	myCourses := []heaputil.ExternalItem{
-		heaputil.ExternalItem{Value: "1", Duration: 100, EndingTime: 200},
-		heaputil.ExternalItem{Value: "2", Duration: 200, EndingTime: 1300},
-		heaputil.ExternalItem{Value: "3", Duration: 1000, EndingTime: 1250},
-		heaputil.ExternalItem{Value: "4", Duration: 2000, EndingTime: 3200},
-	}
 
-	var scheduledCourses = heaputil.ScheduleItems(myCourses)
+	s := "pineapplepenapple"
+	wordDict := stringutil.WordDictionary{"apple", "pen", "applepen", "pine", "pineapple"}
+	outSentences := stringutil.BreakSentenceByDict(s, wordDict)
 
-	fmt.Println(scheduledCourses)
+	fmt.Println(outSentences)
+
+	s1 := "catsandog"
+	wordDict1 := stringutil.WordDictionary{"cats", "dog", "sand", "and", "cat"}
+	outSentences1 := stringutil.BreakSentenceByDict(s1, wordDict1)
+
+	fmt.Println(outSentences1)
+
 }
