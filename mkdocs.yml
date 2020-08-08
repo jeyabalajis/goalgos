@@ -3,3 +3,13 @@ theme:
   name: material
 nav:
   - Home: index.md
+  - 'Graph':
+    - 'Tree':      
+      - 'Maximum sum possible in a tree': 'graph/tree/max-sum-possible-tree.md'
+      - 'Same Tree': 'graph/tree/same-tree.md'
+  - 'String':
+    - 'Word Break':
+      - 'Break Sentence by Sub String': 'string/word-break/break-sentence-by-substr.md'
+  - 'Optimization':
+    - 'Scheduling':
+      - 'Schedule Courses': 'optimization/scheduling/schedule-courses.md'
