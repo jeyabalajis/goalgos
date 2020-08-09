@@ -14,4 +14,4 @@ nav:
     - 'Scheduling':
       - 'Schedule Courses': 'optimization/scheduling/schedule-courses.md'
     - 'Network':
-      - 'Cheapest flights within k stops': 'optimization/network/cheapest-flights-within-k-stops'
+      - 'Cheapest flights within k stops': 'optimization/network/cheapest-flights-within-k-stops.md'
