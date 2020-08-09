@@ -258,6 +258,19 @@
     Problem Statement:
   </a>
   
+    <nav class="md-nav" aria-label="Problem Statement:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -512,6 +525,19 @@
     Problem Statement:
   </a>
   
+    <nav class="md-nav" aria-label="Problem Statement:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -541,29 +567,33 @@
 <h2 id="problem-statement">Problem Statement:</h2>
 <p>Given a <strong>non-empty</strong> binary tree, find the maximum path sum.</p>
 <p>For this problem, a path is defined as any sequence of nodes from some starting node to any node in the tree along the parent-child connections. The path must contain <strong>at least one node</strong> and does not need to go through the root.</p>
+<h3 id="example">Example:</h3>
 <p><img alt="Max Path Sum Illustration" src="https://jeyabalajis.github.io/goalgos/images/max-path-sum.png" /></p>
+<p>Difficulty: <img alt="💰" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/1f4b0.svg" title=":moneybag:" /> <img alt="💰" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/1f4b0.svg" title=":moneybag:" /> <img alt="💰" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/1f4b0.svg" title=":moneybag:" /></p>
 <p><a href="https://leetcode.com/problems/binary-tree-maximum-path-sum/">Leet Code Link</a></p>
 <h2 id="solution">Solution</h2>
-<p>Fundamentally, this is a tree traversal algorithm. The following are the facts provided already:</p>
+<blockquote>
+<p>TLDR; Treat each node as an independent tree on it's own and compute max path sum per node. The max of all such sums yields the result.</p>
+</blockquote>
+<p>Fundamentally, this is a tree traversal problem. The following are the facts provided in the problem statement:</p>
 <ol>
 <li>A path must pass through a node. </li>
 <li>A path need not have to go through root node for it to be considered.</li>
 </ol>
-<p>This means that the maximum could either be a single node on it's own (or) it could be a small sub-tree contained within a node and it can be at level level of the tree.</p>
-<p>The entire tree must be traversed before we can arrive at a deterministic answer.</p>
+<p>This means that the maximum sum path could either be a single node on it's own (or) it could be a small sub-tree contained within a node (and) it can be at level level of the tree.</p>
 <p>To solve this, </p>
 <blockquote>
 <p>Each node must be treated as a <strong>first class citizen</strong> on it's own. I.e. Keep a Hash at a particular node level.</p>
-<p>The algorithm must keep track of traversal <strong>from each node</strong> along it's children.</p>
 <p>Whenever a new node is encountered, a new hash is formed and any children traversals are accumulated at this hash level</p>
+<p>The algorithm must keep track of traversal <strong>from each node</strong> along it's children; left and right separately.</p>
 </blockquote>
-<p>Once the problem is broken as above, the solution is pretty easy.</p>
+<p>Once the problem is broken down as above, the solution is pretty easy.</p>
 <ul>
-<li>Against each node (hash), keep track of the maximum sum on the left traversal and right traversal separately</li>
-<li>The total sum for a hash (i.e. at a node level) would be the node's value + left maximum + right maximum.</li>
-<li>Every node traversal (including root) will result in two go routines: <ul>
+<li>Against each node (hash), keep track of the maximum sum on the left traversal and right traversal separately.</li>
+<li>The total sum for a hash (i.e. against a node) would be the node's value + left maximum + right maximum.</li>
+<li>Every new node traversal (including root) will result in two go routines: <ul>
 <li>one go routine that's a continuation of it's parent</li>
-<li>one go routine with this node as a first class citizen</li>
+<li>one go routine with this node as a first class citizen for the traversals below this node.</li>
 </ul>
 </li>
 <li>The accumulated value uptil all the iterations for a Hash shall be passed as a parameter to the recursive function</li>
@@ -575,34 +605,35 @@
         &quot;left_max&quot;: 6,
         &quot;right_max&quot;: 16
     },
-    &quot;1-4-LEFT&quot;: {
+    &quot;1-4-ROOT&quot;: {
         &quot;left_max&quot;: -5,
         &quot;right_max&quot;: 2
     },
-    &quot;1-3-RIGHT&quot;: {
+    &quot;1-3-ROOT&quot;: {
         &quot;left_max&quot;: 1,
         &quot;right_max&quot;: 13
     },
-    &quot;2--5-LEFT&quot;: {
+    &quot;2--5-ROOT&quot;: {
         &quot;left_max&quot;: 0,
         &quot;right_max&quot;: 0
     },
-    &quot;2-2-RIGHT&quot;: {
+    &quot;2-2-ROOT&quot;: {
         &quot;left_max&quot;: 0,
         &quot;right_max&quot;: 0
     },
-    &quot;2-1-LEFT&quot;: {
+    &quot;2-1-ROOT&quot;: {
         &quot;left_max&quot;: 0,
         &quot;right_max&quot;: 0
     },
-    &quot;2-13-RIGHT&quot;: {
+    &quot;2-13-ROOT&quot;: {
         &quot;left_max&quot;: 0,
         &quot;right_max&quot;: 0
     }
 }
 </code></pre>
 
-<p>The maximum sum out of all these Hash Maps is against the root node and the value is 28.</p>
+<p>The maximum sum out of all these Hash Maps is the maximum sum path.</p>
+<p>For the example mentioned above, this is against the root node and the value is 28.</p>
 <p>The core logic is as follows:</p>
 <pre><code class="golang">// traverse each node and build up hash map by each node
 func traverse(
