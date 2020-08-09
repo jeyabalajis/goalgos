@@ -9,19 +9,19 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
       
-        <link rel="canonical" href="https://jeyabalajis.github.io/goalgos/optimization/scheduling/schedule-courses/">
+        <link rel="canonical" href="https://jeyabalajis.github.io/goalgos/optimization/cheapest-flights-within-k-stops/">
       
       
-      <link rel="shortcut icon" href="../../../assets/images/favicon.png">
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.0">
     
     
       
-        <title>Schedule Courses - goalgos</title>
+        <title>Cheapest flights within k stops - goalgos</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.b5d04df8.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.b5d04df8.min.css">
       
       
     
@@ -51,7 +51,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#schedule-courses" class="md-skip">
+        <a href="#cheapest-flights-within-k-stops" class="md-skip">
           Skip to content
         </a>
       
@@ -79,7 +79,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              Schedule Courses
+              Cheapest flights within k stops
             
           </span>
         </div>
@@ -153,7 +153,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../.." title="Home" class="md-nav__link">
+    <a href="../.." title="Home" class="md-nav__link">
       Home
     </a>
   </li>
@@ -215,7 +215,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../graph/tree/max-sum-possible-tree/" title="Maximum sum possible in a tree" class="md-nav__link">
+    <a href="../../graph/max-sum-possible-tree/" title="Maximum sum possible in a tree" class="md-nav__link">
       Maximum sum possible in a tree
     </a>
   </li>
@@ -227,7 +227,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../graph/tree/same-tree/" title="Same Tree" class="md-nav__link">
+    <a href="../../graph/same-tree/" title="Same Tree" class="md-nav__link">
       Same Tree
     </a>
   </li>
@@ -299,7 +299,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../string/word-break/break-sentence-by-substr/" title="Break Sentence by Sub String" class="md-nav__link">
+    <a href="../../string/break-sentence-by-substr.md" title="Break Sentence by Sub String" class="md-nav__link">
       Break Sentence by Sub String
     </a>
   </li>
@@ -346,12 +346,10 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4-1" type="checkbox" id="nav-4-1" checked>
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4-1" type="checkbox" id="nav-4-1">
     
     <label class="md-nav__link" for="nav-4-1">
       Scheduling
@@ -373,20 +371,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-      
-    
-    
-    <a href="./" title="Schedule Courses" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../schedule-courses/" title="Schedule Courses" class="md-nav__link">
       Schedule Courses
     </a>
-    
   </li>
 
         
@@ -399,10 +388,12 @@
           
           
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4-2" type="checkbox" id="nav-4-2">
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4-2" type="checkbox" id="nav-4-2" checked>
     
     <label class="md-nav__link" for="nav-4-2">
       Network
@@ -424,11 +415,20 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../../network/cheapest-flights-within-k-stops/" title="Cheapest flights within k stops" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+    <a href="./" title="Cheapest flights within k stops" class="md-nav__link md-nav__link--active">
       Cheapest flights within k stops
     </a>
+    
   </li>
 
         
@@ -473,7 +473,16 @@
                   
                 
                 
-                <h1 id="schedule-courses">Schedule Courses</h1>
+                <h1 id="cheapest-flights-within-k-stops">Cheapest flights within k stops</h1>
+<p><a href="https://leetcode.com/problems/cheapest-flights-within-k-stops/">Problem Link</a></p>
+<p>This is a node traversal problem which can be attacked with recursion and parallelism.</p>
+<ul>
+<li>Keep a common variable for the cheapest cost</li>
+<li>Traverse nodes recursively and accumulate cost.</li>
+<li>For each traversal, validate whether the destination is reached and if yes, push to cheapest cost store</li>
+<li>The cheapest cost store shall accept the path &amp; the cost only if the incoming cost is cheaper than the existing</li>
+<li>Once all the go routines complete, return the cheapest cost and the path</li>
+</ul>
                 
               
               
@@ -492,7 +501,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../../../string/word-break/break-sentence-by-substr/" title="Break Sentence by Sub String" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../schedule-courses/" title="Schedule Courses" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -501,25 +510,11 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Break Sentence by Sub String
+                Schedule Courses
               </div>
             </div>
           </a>
         
-        
-          <a href="../../network/cheapest-flights-within-k-stops/" title="Cheapest flights within k stops" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
-            <div class="md-footer-nav__title">
-              <div class="md-ellipsis">
-                <span class="md-footer-nav__direction">
-                  Next
-                </span>
-                Cheapest flights within k stops
-              </div>
-            </div>
-            <div class="md-footer-nav__button md-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
-            </div>
-          </a>
         
       </nav>
     </div>
@@ -540,15 +535,15 @@
       
     </div>
     
-      <script src="../../../assets/javascripts/vendor.92ffa368.min.js"></script>
-      <script src="../../../assets/javascripts/bundle.5123e3d4.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      <script src="../../assets/javascripts/vendor.92ffa368.min.js"></script>
+      <script src="../../assets/javascripts/bundle.5123e3d4.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
       
       <script>
         app = initialize({
-          base: "../../..",
+          base: "../..",
           features: [],
           search: Object.assign({
-            worker: "../../../assets/javascripts/worker/search.a68abb33.min.js"
+            worker: "../../assets/javascripts/worker/search.a68abb33.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>
