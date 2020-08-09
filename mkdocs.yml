@@ -1,4 +1,5 @@
 site_name: goalgos
+site_url: https://jeyabalajis.github.io/goalgos/
 theme:
   name: material
 nav:
