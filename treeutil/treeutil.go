@@ -11,7 +11,7 @@ import (
 var wg sync.WaitGroup
 
 // Walk walks the tree t sending all values from the tree to the channel ch.
-func walk(t *tree.Tree, ch *chan int) {
+func walk(t *tree.Tree, ch *chan uint32, depth int, nodeQualifier string) {
 	if t == nil {
 		return
 	}
@@ -20,15 +20,17 @@ func walk(t *tree.Tree, ch *chan int) {
 
 	if t.Left != nil {
 		wg.Add(1)
-		go walk(t.Left, ch)
+		go walk(t.Left, ch, depth+1, "LEFT")
 	}
 
 	if t.Right != nil {
 		wg.Add(1)
-		go walk(t.Right, ch)
+		go walk(t.Right, ch, depth+1, "RIGHT")
 	}
 
-	*ch <- t.Value
+	strHash := strconv.Itoa(depth) + nodeQualifier + strconv.Itoa(t.Value)
+
+	*ch <- stringutil.Hash(strHash)
 }
 
 // traverse each node and build up hash map by each node
@@ -90,12 +92,13 @@ func traverse(t *tree.Tree, hm *TreePath, depth int, nodeQualifier string, hashK
 // Same determines whether the trees
 // t1 and t2 contain the same values.
 func Same(t1, t2 *tree.Tree) bool {
-	ch1 := make(chan int)
+
+	ch1 := make(chan uint32)
 	wg.Add(1)
 
-	go walk(t1, &ch1)
+	go walk(t1, &ch1, 0, "ROOT")
 
-	go func(wg *sync.WaitGroup, c chan int) {
+	go func(wg *sync.WaitGroup, c chan uint32) {
 		wg.Wait()
 		close(c)
 	}(&wg, ch1)
@@ -103,21 +106,21 @@ func Same(t1, t2 *tree.Tree) bool {
 	var treeHash1 uint32 = 0
 
 	for i := range ch1 {
-		treeHash1 += stringutil.Hash(strconv.Itoa(i))
+		treeHash1 += i
 	}
 
-	ch2 := make(chan int)
+	ch2 := make(chan uint32)
 	wg.Add(1)
-	go walk(t2, &ch2)
+	go walk(t2, &ch2, 0, "ROOT")
 
-	go func(wg *sync.WaitGroup, c chan int) {
+	go func(wg *sync.WaitGroup, c chan uint32) {
 		wg.Wait()
 		close(c)
 	}(&wg, ch2)
 
 	var treeHash2 uint32 = 0
 	for i := range ch2 {
-		treeHash2 += stringutil.Hash(strconv.Itoa(i))
+		treeHash2 += i
 	}
 
 	if treeHash1 != treeHash2 {
