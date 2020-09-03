@@ -2,14 +2,22 @@ package heaputil
 
 import (
 	"container/heap"
+	"sort"
 )
 
-// ExternalItem is sent from the caller for scheduling
+// ExternalItem is sent from the caller for scheduling.
 type ExternalItem struct {
 	Value      string // The value of the item; arbitrary.
-	Duration   int
-	EndingTime int // The priority of the item in the queue.
+	Duration   int    // The priority of the item in the Max Heap.
+	EndingTime int    // Used for sorting items by lowest ending item
 }
+
+// ByEndingTime implements sort.Interface based on the EndingTime
+type ByEndingTime []ExternalItem
+
+func (a ByEndingTime) Len() int           { return len(a) }
+func (a ByEndingTime) Less(i, j int) bool { return a[i].EndingTime < a[j].EndingTime }
+func (a ByEndingTime) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 
 // ScheduledItem is the scheduled item post processing
 type ScheduledItem struct {
@@ -19,6 +27,13 @@ type ScheduledItem struct {
 	End      int
 }
 
+// ByEndTime implements sort.Interface based on the EndTime
+type ByEndTime []ScheduledItem
+
+func (a ByEndTime) Len() int           { return len(a) }
+func (a ByEndTime) Less(i, j int) bool { return a[i].End < a[j].End }
+func (a ByEndTime) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+
 // ScheduleItems provides a schedule of maximum items that can be taken contiguously
 // The "item" can be a course or an event
 func ScheduleItems(items []ExternalItem) []ScheduledItem {
@@ -26,26 +41,44 @@ func ScheduleItems(items []ExternalItem) []ScheduledItem {
 		Only one item (course or program or event) is allowed at a time
 		The items must be contiguous, i.e. there cannot be a gap between one item and the next
 	*/
-	pq := make(PriorityQueue, len(items))
-	i := 0
-	for _, item := range items {
-		var internalItem = Item{value: item.Value, priority: item.EndingTime, duration: item.Duration}
-		pq[i] = &internalItem
-		i++
-	}
-	heap.Init(&pq)
 
-	var scheduledItems []ScheduledItem
+	// First sort the items to be scheduled in ascending order of end duration
+	sort.Sort(ByEndingTime(items))
+
+	// Now go through the courses and put them into (Max) Heap.
+	// If a course cannot fit, see if it can by popping the max item from the heap
+	pq := &PriorityQueue{}
+	heap.Init(pq)
 	var start = 0
-	for pq.Len() > 0 {
-		item := heap.Pop(&pq).(*Item)
-		if start+item.duration <= item.priority {
-			scheduledItems = append(
-				scheduledItems,
-				ScheduledItem{Value: item.value, Start: start, Duration: item.duration, End: start + item.duration},
-			)
-			start += item.duration + 1
+	for _, item := range items {
+
+		var internalItem = Item{value: item.Value, priority: item.Duration, start: start}
+		if start+item.Duration <= item.EndingTime {
+			internalItem.end = start + item.Duration
+			heap.Push(pq, &internalItem)
+			start = internalItem.end + 1
+		} else {
+			maxHeapTop, _ := heap.Pop(pq).(*Item)
+			if maxHeapTop.priority > item.Duration && maxHeapTop.start+item.Duration <= item.EndingTime {
+				internalItem.start = maxHeapTop.start
+				internalItem.end = maxHeapTop.start + item.Duration
+
+				heap.Push(pq, &internalItem)
+				start = internalItem.end + 1
+			} else {
+				heap.Push(pq, &maxHeapTop)
+			}
 		}
 	}
+
+	var scheduledItems []ScheduledItem
+	for pq.Len() > 0 {
+		item := heap.Pop(pq).(*Item)
+		scheduledItems = append(
+			scheduledItems,
+			ScheduledItem{Value: item.value, Start: item.start, Duration: item.priority, End: item.end},
+		)
+	}
+	sort.Sort(ByEndTime(scheduledItems))
 	return scheduledItems
 }

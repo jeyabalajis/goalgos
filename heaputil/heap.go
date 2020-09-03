@@ -8,7 +8,8 @@ import (
 type Item struct {
 	value    string // The value of the item; arbitrary.
 	priority int    // The priority of the item in the queue.
-	duration int
+	start    int
+	end      int
 	// The index is needed by update and is maintained by the heap.Interface methods.
 	index int // The index of the item in the heap.
 }
@@ -19,10 +20,10 @@ type PriorityQueue []*Item
 func (pq PriorityQueue) Len() int { return len(pq) }
 
 func (pq PriorityQueue) Less(i, j int) bool {
-	// We want Pop to give us the lowest, not highest, priority so we use less than here.
-	return pq[i].priority < pq[j].priority
+	// if we want Pop to give us the lowest, not highest priority so we use < here.
+	// If we want the highest priority to come first, we will be using > symbol here.
+	return pq[i].priority > pq[j].priority
 
-	// Use > greather than symbol if you would like to retrieve item by highest priority first
 }
 
 func (pq PriorityQueue) Swap(i, j int) {
@@ -55,4 +56,15 @@ func (pq *PriorityQueue) update(item *Item, value string, priority int) {
 	item.value = value
 	item.priority = priority
 	heap.Fix(pq, item.index)
+}
+
+// Peek returns the top item from priority queue
+func (pq *PriorityQueue) Peek() interface{} {
+	curr := *pq
+	n := len(curr)
+	if n > 0 {
+		return curr[0]
+	}
+
+	return nil
 }

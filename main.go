@@ -3,28 +3,20 @@ package main
 import (
 	"fmt"
 
-	"github.com/jeyabalajis/goalgos/graphutil"
+	"github.com/jeyabalajis/goalgos/heaputil"
 )
 
 func main() {
 
-	twoNode := graphutil.Node{Value: 2}
-	oneNode := graphutil.Node{
-		Value: 1,
-		Children: []graphutil.Edge{
-			graphutil.Edge{Cost: 100, Node: twoNode},
-		},
+	myCourses := []heaputil.ExternalItem{
+		heaputil.ExternalItem{Value: "1", Duration: 100, EndingTime: 200},
+		heaputil.ExternalItem{Value: "2", Duration: 200, EndingTime: 1300},
+		heaputil.ExternalItem{Value: "3", Duration: 1000, EndingTime: 1250},
+		heaputil.ExternalItem{Value: "4", Duration: 2000, EndingTime: 3200},
 	}
 
-	zeroNode := graphutil.Node{
-		Value: 0,
-		Children: []graphutil.Edge{
-			graphutil.Edge{Cost: 100, Node: oneNode},
-			graphutil.Edge{Cost: 500, Node: twoNode},
-		},
-	}
+	var scheduledCourses = heaputil.ScheduleItems(myCourses)
 
-	minCost := graphutil.MinCostRoute(zeroNode, 0, 2, 1)
-	fmt.Println(minCost)
+	fmt.Println(scheduledCourses)
 
 }
