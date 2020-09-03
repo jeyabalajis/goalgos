@@ -16,9 +16,14 @@ func TestScheduleItems(t *testing.T) {
 
 	var scheduledCourses = heaputil.ScheduleItems(myCourses)
 
+	if len(scheduledCourses) != 3 {
+		t.Errorf("Expected 3 got %d", len(scheduledCourses))
+	}
+
 	for index, scheduledItem := range scheduledCourses {
 		if index == 0 && scheduledItem.Value != "1" {
 			t.Errorf("Expected 1 got %s", scheduledItem.Value)
 		}
 	}
+
 }
