@@ -299,7 +299,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../string/break-sentence-by-substr.md" title="Break Sentence by Sub String" class="md-nav__link">
+    <a href="../../string/break-sentence-by-substr/" title="Break Sentence by Sub String" class="md-nav__link">
       Break Sentence by Sub String
     </a>
   </li>
@@ -425,9 +425,68 @@
       
     
     
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Cheapest flights within k stops
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
+        </span>
+      </label>
+    
     <a href="./" title="Cheapest flights within k stops" class="md-nav__link md-nav__link--active">
       Cheapest flights within k stops
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#solution" class="md-nav__link">
+    Solution
+  </a>
+  
+    <nav class="md-nav" aria-label="Solution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#depth-first-search" class="md-nav__link">
+    Depth First Search
+  </a>
+  
+    <nav class="md-nav" aria-label="Depth First Search">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#source-code" class="md-nav__link">
+    Source Code
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -459,6 +518,49 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#solution" class="md-nav__link">
+    Solution
+  </a>
+  
+    <nav class="md-nav" aria-label="Solution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#depth-first-search" class="md-nav__link">
+    Depth First Search
+  </a>
+  
+    <nav class="md-nav" aria-label="Depth First Search">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#source-code" class="md-nav__link">
+    Source Code
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -475,7 +577,16 @@
                 
                 <h1 id="cheapest-flights-within-k-stops">Cheapest flights within k stops</h1>
 <p><a href="https://leetcode.com/problems/cheapest-flights-within-k-stops/">Problem Link</a></p>
-<p>This is a node traversal problem which can be attacked with recursion and parallelism.</p>
+<h2 id="solution">Solution</h2>
+<p>This is a node traversal problem. This can be solved in two ways:</p>
+<ul>
+<li>This can be a depth first search (DFS) and can be attacked with recursion and parallelism.</li>
+<li>This can be a breadth first search. In this case, a Hash Map is maintained as follows:<ul>
+<li>Against each node, the shortest distance from source &amp; the previous node to this path is maintained</li>
+</ul>
+</li>
+</ul>
+<h3 id="depth-first-search">Depth First Search</h3>
 <ul>
 <li>Keep a common variable for the cheapest cost</li>
 <li>Traverse nodes recursively and accumulate cost.</li>
@@ -483,6 +594,25 @@
 <li>The cheapest cost store shall accept the path &amp; the cost only if the incoming cost is cheaper than the existing</li>
 <li>Once all the go routines complete, return the cheapest cost and the path</li>
 </ul>
+<h4 id="source-code">Source Code</h4>
+<pre><code>func searchGraphDfs(graph Node, src int, dest int, maxStops int, stops int, currCost int) (minCost int) {
+
+    minCost = 99999
+    for _, edge := range graph.Children {
+        var cost int
+        if edge.Node.Value == dest &amp;&amp; stops &lt;= maxStops {
+            cost = currCost + edge.Cost
+        } else {
+            cost = searchGraphDfs(edge.Node, src, dest, maxStops, stops+1, currCost+edge.Cost)
+        }
+        if cost &lt; minCost {
+            minCost = cost
+        }
+    }
+
+    return minCost
+}
+</code></pre>
                 
               
               

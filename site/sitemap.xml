@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url>
      <loc>https://jeyabalajis.github.io/goalgos/</loc>
-     <lastmod>2020-08-09</lastmod>
+     <lastmod>2020-09-05</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://jeyabalajis.github.io/goalgos/graph/max-sum-possible-tree/</loc>
-     <lastmod>2020-08-09</lastmod>
+     <lastmod>2020-09-05</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://jeyabalajis.github.io/goalgos/graph/same-tree/</loc>
-     <lastmod>2020-08-09</lastmod>
+     <lastmod>2020-09-05</lastmod>
+     <changefreq>daily</changefreq>
+    </url><url>
+     <loc>https://jeyabalajis.github.io/goalgos/string/break-sentence-by-substr/</loc>
+     <lastmod>2020-09-05</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://jeyabalajis.github.io/goalgos/optimization/schedule-courses/</loc>
-     <lastmod>2020-08-09</lastmod>
+     <lastmod>2020-09-05</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://jeyabalajis.github.io/goalgos/optimization/cheapest-flights-within-k-stops/</loc>
-     <lastmod>2020-08-09</lastmod>
+     <lastmod>2020-09-05</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>
