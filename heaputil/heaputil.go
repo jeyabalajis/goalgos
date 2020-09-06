@@ -52,14 +52,14 @@ func ScheduleItems(items []ExternalItem) []ScheduledItem {
 	var start = 0
 	for _, item := range items {
 
-		var internalItem = Item{value: item.Value, priority: item.Duration, start: start}
+		var internalItem = Item{Value: item.Value, Priority: item.Duration, start: start}
 		if start+item.Duration <= item.EndingTime {
 			internalItem.end = start + item.Duration
 			heap.Push(pq, &internalItem)
 			start = internalItem.end + 1
 		} else {
 			maxHeapTop, _ := heap.Pop(pq).(*Item)
-			if maxHeapTop.priority > item.Duration && maxHeapTop.start+item.Duration <= item.EndingTime {
+			if maxHeapTop.Priority > item.Duration && maxHeapTop.start+item.Duration <= item.EndingTime {
 				internalItem.start = maxHeapTop.start
 				internalItem.end = maxHeapTop.start + item.Duration
 
@@ -76,7 +76,7 @@ func ScheduleItems(items []ExternalItem) []ScheduledItem {
 		item := heap.Pop(pq).(*Item)
 		scheduledItems = append(
 			scheduledItems,
-			ScheduledItem{Value: item.value, Start: item.start, Duration: item.priority, End: item.end},
+			ScheduledItem{Value: item.Value, Start: item.start, Duration: item.Priority, End: item.end},
 		)
 	}
 	sort.Sort(ByEndTime(scheduledItems))

@@ -3,20 +3,44 @@ package main
 import (
 	"fmt"
 
-	"github.com/jeyabalajis/goalgos/heaputil"
+	"github.com/jeyabalajis/goalgos/graphutil"
 )
 
 func main() {
 
-	myCourses := []heaputil.ExternalItem{
-		heaputil.ExternalItem{Value: "1", Duration: 100, EndingTime: 200},
-		heaputil.ExternalItem{Value: "2", Duration: 200, EndingTime: 1300},
-		heaputil.ExternalItem{Value: "3", Duration: 1000, EndingTime: 1250},
-		heaputil.ExternalItem{Value: "4", Duration: 2000, EndingTime: 3200},
+	eNode := graphutil.Node{Value: 5}
+	dNode := graphutil.Node{
+		Value: 4,
+		Children: []graphutil.Edge{
+			graphutil.Edge{Cost: 4, Node: eNode},
+		},
 	}
 
-	var scheduledCourses = heaputil.ScheduleItems(myCourses)
+	bNode := graphutil.Node{
+		Value: 2,
+		Children: []graphutil.Edge{
+			graphutil.Edge{Cost: 4, Node: eNode},
+		},
+	}
 
-	fmt.Println(scheduledCourses)
+	cNode := graphutil.Node{
+		Value: 3,
+		Children: []graphutil.Edge{
+			graphutil.Edge{Cost: 2, Node: bNode},
+			graphutil.Edge{Cost: 4, Node: dNode},
+		},
+	}
+
+	aNode := graphutil.Node{
+		Value: 1,
+		Children: []graphutil.Edge{
+			graphutil.Edge{Cost: 4, Node: bNode},
+			graphutil.Edge{Cost: 1, Node: cNode},
+		},
+	}
+
+	minCost := graphutil.MinCostRouteBfs(aNode, 1, 5, 2)
+
+	fmt.Println(minCost)
 
 }
